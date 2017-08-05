@@ -1,23 +1,46 @@
 class TreeEdges {
 	static continueAndBranch  { "├── " }
-	static goDown             { "│   " }
+	static continue           { "│   " }
 	static last               { "└── " }
+	static blank              { "    " }
 }
 
 class Node {
-	toString { "Node" }
+	toString { stringify("", true) }
+
+	stringify(baseIndentation, last){
+		var acc = ""
+
+		acc = acc + "%(_label)"
+
+		for(child in _children){
+			var isLast = child == _children[-1]
+			var entryIndent = baseIndentation + ( isLast ? TreeEdges.last : TreeEdges.continueAndBranch )
+			var childIndent = baseIndentation + ( isLast ? TreeEdges.blank : TreeEdges.continue )
+
+			acc = acc + "\n%(entryIndent)"
+
+			if(child is Node){
+				acc = acc + "%(child.stringify(childIndent, isLast))"
+			} else {
+				acc = acc + "%(child)"
+			}
+		}
+
+		return acc
+	}
 
 	construct new() {
-		__indentation = 0
+		_label = ""
+		_children = []
 	}
 
 	construct new(label){
-		__indentation = 0
 		_label = label
+		_children = []
 	}
 
 	construct new(label, children){
-		__indentation = 0
 		_label = label
 		_children = children
 	}
@@ -31,51 +54,17 @@ class Node {
 
 class Tree is Node {
 	construct new() {
-		__indentation = 0
+		_label = "."
+		_children = []
 	}
 
 	construct new(label){
-		__indentation = 0
 		_label = label
+		_children = []
 	}
 
 	construct new(label, children){
-		__indentation = 0
 		_label = label
 		_children = children
 	}
 }
-
-var tree = Tree.new()
-
-var alpha = Node.new("alpha")
-var beta = Node.new("beta")
-var foo = Node.new("foo", [ alpha, beta ] )
-
-var zeta = Node.new("zeta")
-var gamma = Node.new("gamma")
-gamma.addChild("2.txt")
-gamma.addChild(zeta)
-
-var bar = Node.new("bar", [ "1.txt", gamma ] )
-
-var baz = Node.new("baz")
-
-tree.addChild(bar)
-tree.addChild(baz)
-tree.addChild(foo)
-
-System.print(tree)
-
-/*
-├── bar
-│   ├── 1.txt
-│   └── gamma
-│       ├── 2.txt
-│       └── zeta
-├── baz
-│   └── 3.txt
-└── foo
-    ├── alpha
-    └── beta
-*/

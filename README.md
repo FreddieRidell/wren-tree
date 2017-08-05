@@ -1,4 +1,4 @@
-# Wren Branch
+# Wren Tree
 
 _A tree structure viewer written in wren_
 
