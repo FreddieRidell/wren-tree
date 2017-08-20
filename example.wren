@@ -34,3 +34,24 @@ System.print("
     └── beta
 ")
 
+var objectTree = {
+	"bar": [
+		"1.txt",
+		[
+			"2.txt",
+			"zeta",
+		],
+	],
+	"baz": {
+		"3.txt": true,
+	},
+	"foo": {
+		"alpha": true,
+		"beta": true,
+	},
+}
+
+var fromObjectTree = Tree.from(objectTree)
+System.print("%(fromObjectTree)")
+
+System.print("%({} is Sequence)")

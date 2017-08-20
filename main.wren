@@ -45,6 +45,34 @@ class Node {
 		_children = children
 	}
 
+	construct from(object){
+		_label = ""
+		_children = []
+
+		addFrom(object)
+	}
+
+	construct from(object, label){
+		_label = label
+		_children = []
+
+		addFrom(object)
+	}
+
+	addFrom(object){
+		if(object is Map){
+			for(key in object.keys){
+				_children.add( Node.from(object[key], key) )
+			}
+		} else if(object is List){
+			for(i in 0...object.count){
+				_children.add( Node.from(object[i], i) )
+			}
+		} else {
+			_children.add( Node.new("%(object)") )
+		}
+	}
+
 	addChild(child){
 		if(!_children) _children = []
 
@@ -54,17 +82,18 @@ class Node {
 
 class Tree is Node {
 	construct new() {
-		_label = "."
-		_children = []
+		super()
 	}
 
 	construct new(label){
-		_label = label
-		_children = []
+		super(label)
 	}
 
 	construct new(label, children){
-		_label = label
-		_children = children
+		super(label, children)
+	}
+
+	construct from(object){
+		super(object)
 	}
 }
